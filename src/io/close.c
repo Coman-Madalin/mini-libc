@@ -5,8 +5,13 @@
 #include <stdarg.h>
 #include <errno.h>
 
-int close(int fd)
-{
-	/* TODO: Implement close(). */
-	return -1;
+int close(int fd) {
+	int ret = syscall(__NR_close, fd);
+
+	if (ret < 0) {
+		errno = -ret;
+		return -1;
+	}
+
+	return ret;
 }
