@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: BSD-3-Clause */
 
 #ifndef __UNISTD_H__
-#define __UNISTD_H__	1
+#define __UNISTD_H__    1
 
 #ifdef __cplusplus
 extern "C" {
@@ -9,6 +9,7 @@ extern "C" {
 
 #include <internal/io.h>
 #include <internal/types.h>
+#include <stddef.h>
 
 #define SEEK_SET 0
 #define SEEK_CUR 1
