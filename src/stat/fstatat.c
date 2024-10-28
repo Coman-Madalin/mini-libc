@@ -8,11 +8,11 @@
 #include <errno.h>
 
 #define makedev(x, y) ( \
-		(((x)&0xfffff000ULL) << 32) | \
-	(((x)&0x00000fffULL) << 8) | \
-		(((y)&0xffffff00ULL) << 12) | \
-	(((y)&0x000000ffULL)) \
-	)
+        (((x)&0xfffff000ULL) << 32) | \
+    (((x)&0x00000fffULL) << 8) | \
+        (((y)&0xffffff00ULL) << 12) | \
+    (((y)&0x000000ffULL)) \
+    )
 
 /* Structure describing file characteristics as defined in linux/stat.h */
 struct statx {
@@ -40,14 +40,37 @@ struct statx {
 	uint64_t spare[14];
 };
 
-int fstatat_statx(int fd, const char *restrict path, struct stat *restrict st, int flag)
-{
-	/* TODO: Implement fstatat_statx(). Use statx and makedev above. */
-	return -1;
+// I have no idea if this works
+int fstatat_statx(int fd, const char *restrict path, struct stat *restrict st,
+				  int flag) {
+	struct statx buffer;
+	long err = syscall(__NR_statx, fd, path, flag, &buffer);
+	if (err != 0) {
+		errno = -err;
+		return -1;
+	}
+
+	st->st_atime = buffer.stx_atime.tv_sec;
+	st->st_atime_nsec = buffer.stx_atime.tv_nsec;
+	st->st_blksize = buffer.stx_blksize;
+	st->st_blocks = buffer.stx_blocks;
+	st->st_ctime = buffer.stx_ctime.tv_sec;
+	st->st_ctime_nsec = buffer.stx_ctime.tv_nsec;
+	st->st_gid = buffer.stx_gid;
+	st->st_ino = buffer.stx_ino;
+	st->st_mode = buffer.stx_mode;
+	st->st_mtime = buffer.stx_mtime.tv_sec;
+	st->st_mtime_nsec = buffer.stx_mtime.tv_nsec;
+	st->st_nlink = buffer.stx_nlink;
+	st->st_size = buffer.stx_size;
+	st->st_uid = buffer.stx_uid;
+	st->st_dev = makedev(buffer.stx_dev_major, buffer.stx_dev_minor);
+	st->st_rdev = makedev(buffer.stx_rdev_major, buffer.stx_rdev_minor);
+
+	return 0;
 }
 
-int fstatat(int fd, const char *restrict path, struct stat *restrict st, int flag)
-{
-	/* TODO: Implement fstatat(). Use fstatat_statx(). */
-	return -1;
+int
+fstatat(int fd, const char *restrict path, struct stat *restrict st, int flag) {
+	return fstatat_statx(fd, path, st, flag);
 }
