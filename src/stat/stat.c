@@ -5,8 +5,12 @@
 #include <fcntl.h>
 #include <errno.h>
 
-int stat(const char *restrict path, struct stat *restrict buf)
-{
-	/* TODO: Implement stat(). */
-	return -1;
+int stat(const char *restrict path, struct stat *restrict buf) {
+	long err = syscall(__NR_stat, path, buf);
+	if (err != 0) {
+		errno = -err;
+		return -1;
+	}
+
+	return 0;
 }
