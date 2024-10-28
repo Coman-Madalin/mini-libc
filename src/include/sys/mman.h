@@ -15,9 +15,9 @@ extern "C" {
 #define PROT_NONE	0x0		/* Page can not be accessed.  */
 
 /* Sharing types (must choose one and only one of these).  */
-#define MAP_SHARED	0x01		/* Share changes.  */
-#define MAP_PRIVATE	0x02		/* Changes are private.  */
-#define MAP_ANONYMOUS	0x20		/* Don't use a file.  */
+#define MAP_SHARED		0x01	/* Share changes.  */
+#define MAP_PRIVATE		0x02	/* Changes are private.  */
+#define MAP_ANONYMOUS	0x20	/* Don't use a file.  */
 #define MAP_ANON	MAP_ANONYMOUS
 
 #define MREMAP_MAYMOVE	1
