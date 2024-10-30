@@ -4,7 +4,7 @@
 #define __STDDEF_H__    1
 
 #include <internal/types.h>
-#include <struct_timespec.h>
+#include <time.h>
 
 unsigned int nanosleep(const struct timespec *req, struct timespec *rem);
 

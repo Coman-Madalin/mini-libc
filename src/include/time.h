@@ -1,6 +1,9 @@
 #ifndef TIME_H
 #define TIME_H
 
-// Made because test_nanosleep wouldn't work without it
+struct timespec {
+	unsigned long tv_sec;  	/* Seconds.  */
+	unsigned long tv_nsec; 	/* Nanoseconds.  */
+};
 
 #endif //TIME_H
